@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { handleSetToday, selectedDateStateSelector } from 'app';
+import { StyledNavigation } from '../styles/navigation.styled';
 
 interface IProps {
   prevYear: () => void;
@@ -14,7 +15,7 @@ export const Navigation: FC<IProps> = ({ prevYear, prevMonth, nextYear, nextMont
   const value = useAppSelector(selectedDateStateSelector);
   const dispatch = useAppDispatch();
   return (
-    <div>
+    <StyledNavigation>
       <button type="button" onClick={() => dispatch(handleSetToday())}>
         Today
       </button>
@@ -24,13 +25,13 @@ export const Navigation: FC<IProps> = ({ prevYear, prevMonth, nextYear, nextMont
       <button type="button" onClick={prevMonth}>
         {'<'}
       </button>
-      <button type="button">{format(value ? new Date(value) : new Date(), 'LLLL yyyy')}</button>
+      <div>{format(value ? new Date(value) : new Date(), 'LLLL yyyy')}</div>
       <button type="button" onClick={nextMonth}>
         {'>'}
       </button>
       <button type="button" onClick={nextYear}>
         {'>>'}
       </button>
-    </div>
+    </StyledNavigation>
   );
 };

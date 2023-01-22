@@ -1,0 +1,60 @@
+name: Deploy
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Install pnpm
+        run: npm i -g pnpm
+
+      - name: Install deps
+        run: pnpm i --frozen-lockfile
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./dist
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

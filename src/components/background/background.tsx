@@ -5,8 +5,8 @@ export const Background = () => {
         position: 'fixed',
         margin: 0,
         width: '100%',
-        height: '100vh',
         fill: '#272727',
+        height: '100%',
         zIndex: 0,
       }}
       viewBox="0 0 100 100"
