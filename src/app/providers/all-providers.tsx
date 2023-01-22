@@ -1,7 +1,8 @@
 import { PropsWithChildren, StrictMode } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { Provider } from 'react-redux';
-import { store } from '../store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from '../store';
 
 const Global = createGlobalStyle`
   * {
@@ -15,8 +16,10 @@ export const AllProviders = ({ children }: PropsWithChildren<unknown>) => {
   return (
     <StrictMode>
       <Provider store={store}>
-        <Global />
-        {children}
+        <PersistGate loading={null} persistor={persistor}>
+          <Global />
+          {children}
+        </PersistGate>
       </Provider>
     </StrictMode>
   );
