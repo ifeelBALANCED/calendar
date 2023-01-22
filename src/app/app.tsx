@@ -1,11 +1,9 @@
-import { Background, Calendar } from 'components';
+import { Background, Calendar, Navigation, WrapperStyled } from 'components';
 import React, { useEffect } from 'react';
 import { add, format, sub } from 'date-fns';
 import styled from 'styled-components';
-import { Navigation } from '../components/calendar/navigation';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { holidaysThunk, selectDate, selectedDateStateSelector } from './store';
-import { WrapperStyled } from '../components/styles/wrapper.styled';
 
 const StyledApp = styled.div`
   width: 100%;

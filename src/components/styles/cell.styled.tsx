@@ -155,6 +155,17 @@ export const CellActionMobile = styled.div`
     color: #fff;
     border: none;
     font-weight: 600;
+    position: relative;
+
+    div {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 6px;
+      height: 6px;
+      background-color: white;
+      border-radius: 50px;
+    }
   }
   @media screen and (max-width: 1024px) {
     display: flex;
@@ -164,4 +175,10 @@ export const CellActionMobile = styled.div`
       return `button { color: ${props.isActive ? '#272727' : '#fff'} }`;
     }}
   }
+`;
+
+export const StyledHolidays = styled.div`
+  background-color: #efefef;
+  border-radius: 5px;
+  padding: 5px;
 `;

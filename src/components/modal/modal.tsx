@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { TiDelete } from 'react-icons/ti';
 import {
   addTask,
+  holidaysStateSelector,
   idStateSelector,
   oneTaskStateSelector,
   removeTask,
@@ -21,6 +22,7 @@ import {
   ModalInput,
   ModalWrap,
   OverLay,
+  StyledHolidays,
   StyledTask,
   TasksWrapperMobile,
 } from '../styles';
@@ -32,6 +34,17 @@ export const Modal = () => {
   const taskInput = useAppSelector(oneTaskStateSelector);
   const value = useAppSelector(selectedDateStateSelector);
   const dispatch = useAppDispatch();
+  const holidays = useAppSelector(holidaysStateSelector);
+  const dateHolidays = Object.entries(holidays)
+    .map((el) => {
+      return {
+        date: el[1].date,
+        name: el[1].name,
+      };
+    })
+    .filter((el) => {
+      return el.date === value;
+    });
   const submitTask = () => {
     if (modalTask.length) {
       dispatch(addTask({ date: value, task: { text: modalTask, id: taskId } }));
@@ -110,6 +123,14 @@ export const Modal = () => {
                 </StyledTask>
               );
             })}
+          {dateHolidays.length !== 0 && (
+            <StyledHolidays>
+              <h3>Holidays of {value}</h3>
+              {dateHolidays.map((el) => {
+                return <div key={v4()}>{el.name}</div>;
+              })}
+            </StyledHolidays>
+          )}
         </TasksWrapperMobile>
       </ModalWrap>
     </OverLay>

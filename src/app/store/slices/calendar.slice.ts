@@ -97,6 +97,9 @@ export const calendarSlice = createSlice({
           (el) => el.id !== action.payload.id
         ),
       };
+      if (![...state.tasks[action.payload.date]].length) {
+        delete state.tasks[action.payload.date];
+      }
     },
   },
   extraReducers: (builder) => {

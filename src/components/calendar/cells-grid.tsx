@@ -23,7 +23,7 @@ import {
   tasksStateSelector,
 } from 'app';
 import { TiDelete } from 'react-icons/ti';
-import { HolidaysModal } from '../modal/holidays-modal';
+import { HolidaysModal } from 'components/modal';
 
 export const CellsGrid = () => {
   const dispatch = useAppDispatch();
@@ -115,6 +115,7 @@ export const CellsGrid = () => {
                 <CellActionMobile isActive={isToday}>
                   <button type="button" onClick={() => handleClickDate(date)}>
                     {date}
+                    {hasTasks && <div />}
                   </button>
                 </CellActionMobile>
                 {showHolidays.show &&
@@ -185,7 +186,6 @@ export const CellsGrid = () => {
                                   );
                                 }}
                               </Draggable>
-                              // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                             );
                           })}
                         {provided.placeholder}
