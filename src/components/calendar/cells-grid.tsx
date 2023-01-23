@@ -1,29 +1,17 @@
 import React, { useState } from 'react';
 import { differenceInDays, endOfMonth, format, setDate, startOfMonth } from 'date-fns';
-import {
-  CellAction,
-  CellActionMobile,
-  CellButton,
-  DeleteTask,
-  Grid,
-  StyledCalendar,
-  StyledCell,
-  StyledTask,
-  TasksWrapper,
-} from 'components/styles';
+import { Grid, StyledCalendar, StyledCell } from 'components/styles';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { v4 } from 'uuid';
 import {
   holidaysStateSelector,
-  removeTask,
   selectDate,
   selectedDateStateSelector,
   showModalWindow,
   tasksStateSelector,
 } from 'app';
-import { TiDelete } from 'react-icons/ti';
-import { HolidaysModal } from 'components/modal';
+import { v4 } from 'uuid';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Cell } from './cell';
 
 export const CellsGrid = () => {
   const dispatch = useAppDispatch();
@@ -56,9 +44,6 @@ export const CellsGrid = () => {
     dispatch(showModalWindow({ show: true, task: '', taskId: null }));
   };
 
-  const handleDrop = (e: DropResult) => {
-    console.log(e);
-  };
   return (
     <StyledCalendar>
       <Grid weekDays>
@@ -73,127 +58,26 @@ export const CellsGrid = () => {
           <StyledCell key={Math.random()} isEmpty />
         ))}
 
-        <DragDropContext onDragEnd={(e) => handleDrop(e)}>
+        <DragDropContext onDragEnd={(e) => console.log(e)}>
           {Array.from({ length: numDays }).map((_, index) => {
             const date = index + 1;
             const isToday =
               format(setDate(validDate(), date), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
-            const hasTasks = tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')];
+            const hasTasks = !!tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')];
             const isHolidays = daysOfHoliday.includes(
               format(setDate(validDate(), date), 'yyyy-MM-dd')
             );
             return (
-              <StyledCell
+              <Cell
                 key={v4()}
-                isActive={isToday}
+                date={date}
+                handleClickDate={handleClickDate}
+                hasTasks={hasTasks}
                 isHolidays={isHolidays}
-                isDays={false}
-                isEmpty={false}
-              >
-                <CellAction>
-                  {date}
-                  <CellButton type="button" onClick={() => handleClickDate(date)}>
-                    +
-                  </CellButton>
-                  {isHolidays && (
-                    <CellButton
-                      type="button"
-                      onClick={() =>
-                        setShowHolidays((prevState) => {
-                          return {
-                            ...prevState,
-                            show: true,
-                            date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-                          };
-                        })
-                      }
-                    >
-                      !
-                    </CellButton>
-                  )}
-                </CellAction>
-                <CellActionMobile isActive={isToday}>
-                  <button type="button" onClick={() => handleClickDate(date)}>
-                    {date}
-                    {hasTasks && <div />}
-                  </button>
-                </CellActionMobile>
-                {showHolidays.show &&
-                  format(setDate(validDate(), date), 'yyyy-MM-dd') === showHolidays.date && (
-                    <HolidaysModal
-                      holidays={holidays}
-                      setShowHolidays={setShowHolidays}
-                      date={format(setDate(validDate(), date), 'yyyy-MM-dd')}
-                    />
-                  )}
-                <Droppable
-                  droppableId={format(setDate(validDate(), date), 'yyyy-MM-dd')}
-                  key={v4()}
-                >
-                  {(provided) => {
-                    return (
-                      <TasksWrapper ref={provided.innerRef} {...provided.droppableProps}>
-                        {hasTasks &&
-                          tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')].map((task, i) => {
-                            return (
-                              <Draggable key={v4()} index={i} draggableId={task.id.toString()}>
-                                {(prov) => {
-                                  return (
-                                    <StyledTask
-                                      ref={prov.innerRef}
-                                      {...prov.draggableProps}
-                                      {...prov.dragHandleProps}
-                                      key={v4()}
-                                      draggable
-                                      onClick={() => {
-                                        if (date) {
-                                          dispatch(
-                                            selectDate(
-                                              format(setDate(validDate(), date), 'yyyy-MM-dd')
-                                            )
-                                          );
-                                          dispatch(
-                                            showModalWindow({
-                                              show: true,
-                                              task: task.task,
-                                              taskId: task.id,
-                                            })
-                                          );
-                                        }
-                                      }}
-                                    >
-                                      <span>{task.task}</span>
-                                      <DeleteTask
-                                        type="button"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          if (date) {
-                                            dispatch(
-                                              removeTask({
-                                                date: format(
-                                                  setDate(validDate(), date),
-                                                  'yyyy-MM-dd'
-                                                ),
-                                                id: task.id,
-                                              })
-                                            );
-                                          }
-                                        }}
-                                      >
-                                        <TiDelete size={30} />
-                                      </DeleteTask>
-                                    </StyledTask>
-                                  );
-                                }}
-                              </Draggable>
-                            );
-                          })}
-                        {provided.placeholder}
-                      </TasksWrapper>
-                    );
-                  }}
-                </Droppable>
-              </StyledCell>
+                isToday={isToday}
+                setShowHolidays={setShowHolidays}
+                showHolidays={showHolidays}
+              />
             );
           })}
         </DragDropContext>
