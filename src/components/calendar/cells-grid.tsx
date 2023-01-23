@@ -3,6 +3,7 @@ import { differenceInDays, endOfMonth, format, setDate, startOfMonth } from 'dat
 import { Grid, StyledCalendar, StyledCell } from 'components/styles';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import {
+  dragAndDrop,
   holidaysStateSelector,
   selectDate,
   selectedDateStateSelector,
@@ -10,7 +11,7 @@ import {
   tasksStateSelector,
 } from 'app';
 import { v4 } from 'uuid';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Cell } from './cell';
 
 export const CellsGrid = () => {
@@ -44,6 +45,22 @@ export const CellsGrid = () => {
     dispatch(showModalWindow({ show: true, task: '', taskId: null }));
   };
 
+  const handleDrop = (result: DropResult) => {
+    const { destination, source } = result;
+    if (
+      !destination ||
+      (destination.droppableId === source.droppableId && destination.index === source.index)
+    )
+      return;
+    const resultObg = {
+      destination: Object.entries(destination)[0][1],
+      destinationIndex: Object.entries(destination)[1][1],
+      source: Object.entries(source)[1][1],
+      sourceIndex: Object.entries(source)[0][1],
+    };
+    dispatch(dragAndDrop(resultObg));
+  };
+
   return (
     <StyledCalendar>
       <Grid weekDays>
@@ -58,7 +75,7 @@ export const CellsGrid = () => {
           <StyledCell key={Math.random()} isEmpty />
         ))}
 
-        <DragDropContext onDragEnd={(e) => console.log(e)}>
+        <DragDropContext onDragEnd={handleDrop}>
           {Array.from({ length: numDays }).map((_, index) => {
             const date = index + 1;
             const isToday =

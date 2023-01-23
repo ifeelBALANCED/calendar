@@ -1,5 +1,5 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DynamicDates, IHolidays } from 'types';
+import { DynamicDates, IDnd, IHolidays, ITask } from 'types';
 import { format } from 'date-fns';
 import { holidaysThunk } from '../thunk';
 
@@ -28,11 +28,62 @@ const initialState: IState = {
   task: '',
   taskId: null,
 };
-
 export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
+    dragAndDrop(state: IState, action: PayloadAction<IDnd>) {
+      const addElementsToTheDifferentCell = (
+        from: ITask[],
+        to: ITask[],
+        srcIndex: number,
+        destIndex: number
+      ) => {
+        const elementFrom = from[srcIndex];
+        to.splice(destIndex, 0, elementFrom);
+      };
+      const swapElementsFromTheSameCell = (arr: ITask[], srcIndex: number, destIndex: number) => {
+        const element = arr[srcIndex];
+        arr.splice(srcIndex, 1);
+        arr.splice(destIndex, 0, element);
+      };
+      if (action.payload.destination === action.payload.source) {
+        swapElementsFromTheSameCell(
+          state.tasks[action.payload.source],
+          action.payload.sourceIndex,
+          action.payload.destinationIndex
+        );
+        state.tasks = {
+          ...state.tasks,
+          [action.payload.source]: [...state.tasks[action.payload.source]],
+        };
+      } else {
+        if (!state.tasks[action.payload.destination]) {
+          state.tasks = {
+            ...state.tasks,
+            [action.payload.destination]: [],
+          };
+        }
+        addElementsToTheDifferentCell(
+          state.tasks[action.payload.source],
+          state.tasks[action.payload.destination],
+          action.payload.sourceIndex,
+          action.payload.destinationIndex
+        );
+        state.tasks = {
+          ...state.tasks,
+          [action.payload.source]: [
+            ...state.tasks[action.payload.source].filter(
+              (el, i) => i !== action.payload.sourceIndex
+            ),
+          ],
+          [action.payload.destination]: [...state.tasks[action.payload.destination]],
+        };
+        if (![...state.tasks[action.payload.source]].length) {
+          delete state.tasks[action.payload.source];
+        }
+      }
+    },
     handleSetToday(state: IState) {
       state.today = format(new Date(), 'yyyy-MM-dd');
       state.selectedDate = format(new Date(), 'yyyy-MM-dd');
@@ -124,6 +175,6 @@ export const calendarSlice = createSlice({
   },
 });
 
-export const { handleSetToday, selectDate, showModalWindow, addTask, removeTask } =
+export const { handleSetToday, selectDate, showModalWindow, addTask, removeTask, dragAndDrop } =
   calendarSlice.actions;
 export const CalendarReducer = calendarSlice.reducer;
