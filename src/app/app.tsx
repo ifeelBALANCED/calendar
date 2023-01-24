@@ -1,9 +1,9 @@
-import { Background, Calendar, Navigation, WrapperStyled } from 'components';
-import React, { useEffect } from 'react';
+import { Background, Calendar, Filter, Navigation, WrapperStyled } from 'components';
+import React, { useEffect, useState } from 'react';
 import { add, format, sub } from 'date-fns';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { holidaysThunk, selectDate, selectedDateStateSelector } from './store';
+import { holidaysThunk, modalStateSelector, selectDate, selectedDateStateSelector } from './store';
 
 const StyledApp = styled.div`
   width: 100%;
@@ -16,10 +16,15 @@ const StyledApp = styled.div`
 export const App = () => {
   const dispatch = useAppDispatch();
   const value = useAppSelector(selectedDateStateSelector);
+  const showModal = useAppSelector(modalStateSelector);
+  const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
     dispatch(holidaysThunk());
-  }, [dispatch]);
+    if (showModal) {
+      setFilterValue('');
+    }
+  }, [dispatch, showModal]);
 
   const validDate = () => {
     return value ? new Date(value) : new Date();
@@ -41,7 +46,8 @@ export const App = () => {
           nextMonth={nextMonth}
           nextYear={nextYear}
         />
-        <Calendar />
+        <Filter value={filterValue} setValue={setFilterValue} />
+        <Calendar filteredValue={filterValue} />
       </WrapperStyled>
     </StyledApp>
   );

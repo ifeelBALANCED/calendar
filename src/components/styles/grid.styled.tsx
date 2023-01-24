@@ -17,6 +17,6 @@ export const Grid = styled.div`
   }
 
   ${(props: { weekDays?: boolean }) => {
-    return `padding-bottom: ${props.weekDays ? '0' : '40px'}`;
+    return `padding-bottom: ${props.weekDays ? '0' : '80px'}`;
   }}
 `;

@@ -4,3 +4,4 @@ export * from './grid.styled';
 export * from './modal.styled';
 export * from './navigation.styled';
 export * from './wrapper.styled';
+export * from './filter.styled';

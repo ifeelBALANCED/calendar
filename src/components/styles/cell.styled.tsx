@@ -39,35 +39,6 @@ export const StyledCell = styled.div`
     }
     return `background-color: #272727`;
   }};
-  @media screen and (max-width: 1024px) {
-    height: 80px;
-    font-size: 14px;
-
-    ${(props: {
-      isActive?: boolean;
-      isHolidays?: boolean;
-      isDays?: boolean;
-      isEmpty?: boolean;
-      // eslint-disable-next-line consistent-return
-    }) => {
-      if (props.isActive) {
-        return `background-color: #fed766;
-              color: #272727;`;
-      }
-      if (props.isHolidays) {
-        return `background-color: #272727;`;
-      }
-      if (props.isDays) {
-        return `background-color: #fed766;
-              color: #272727;
-              height: 40px;`;
-      }
-      if (props.isEmpty) {
-        return `background-color: #fed766;`;
-      }
-      return `background-color: #272727;`;
-    }}
-  }
 `;
 
 export const StyledTask = styled.div`
@@ -79,14 +50,10 @@ export const StyledTask = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
-  font-size: 14px;
+  font-size: 16px;
   span {
     max-width: 300px;
     overflow: hidden;
-  }
-
-  @media screen and (max-width: 1024px) {
-    background-color: #efefef;
   }
 `;
 
@@ -98,25 +65,7 @@ export const TasksWrapper = styled.div`
   margin-top: 5px;
   height: 100%;
   padding-bottom: 50px;
-
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
 `;
-
-export const TasksWrapperMobile = styled.div`
-  display: none;
-  @media screen and (max-width: 1024px) {
-    display: block;
-    ::-webkit-scrollbar {
-      width: 0;
-    }
-    overflow-y: auto;
-    margin-top: 5px;
-    height: 100%;
-  }
-`;
-
 export const DeleteTask = styled.button`
   background-color: transparent;
   border: none;
@@ -140,45 +89,29 @@ export const CellButton = styled.button`
 export const CellAction = styled.div`
   display: flex;
   align-items: center;
-  @media screen and (max-width: 1024px) {
-    display: none;
-  }
-`;
-
-export const CellActionMobile = styled.div`
-  display: none;
-  button {
-    width: 100%;
-    height: 50px;
-    font-size: 30px;
-    background-color: transparent;
-    color: #fff;
-    border: none;
-    font-weight: 600;
-    position: relative;
-
-    div {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 6px;
-      height: 6px;
-      background-color: white;
-      border-radius: 50px;
-    }
-  }
-  @media screen and (max-width: 1024px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    ${(props: { isActive?: boolean }) => {
-      return `button { color: ${props.isActive ? '#272727' : '#fff'} }`;
-    }}
-  }
 `;
 
 export const StyledHolidays = styled.div`
   background-color: #efefef;
   border-radius: 5px;
   padding: 5px;
+`;
+
+export const CellColorLabel = styled.div`
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+
+  ${(props: { red?: boolean; orange?: boolean; yellow?: boolean; green?: boolean }) => {
+    if (props.red) {
+      return 'background-color: red';
+    }
+    if (props.orange) {
+      return 'background-color: orange';
+    }
+    if (props.yellow) {
+      return 'background-color: yellow';
+    }
+    return 'background-color: green';
+  }}
 `;

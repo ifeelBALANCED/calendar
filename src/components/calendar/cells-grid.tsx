@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { differenceInDays, endOfMonth, format, setDate, startOfMonth } from 'date-fns';
 import { Grid, StyledCalendar, StyledCell } from 'components/styles';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -14,7 +14,11 @@ import { v4 } from 'uuid';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { Cell } from './cell';
 
-export const CellsGrid = () => {
+interface IProps {
+  filteredValue: string;
+}
+
+export const CellsGrid: FC<IProps> = ({ filteredValue }) => {
   const dispatch = useAppDispatch();
   const holidays = useAppSelector(holidaysStateSelector);
   const value = useAppSelector(selectedDateStateSelector);
@@ -42,7 +46,7 @@ export const CellsGrid = () => {
   const handleClickDate = (index: number) => {
     const date = format(setDate(validDate(), index), 'yyyy-MM-dd');
     dispatch(selectDate(date));
-    dispatch(showModalWindow({ show: true, task: '', taskId: null }));
+    dispatch(showModalWindow({ show: true, task: '', taskId: null, label: [] }));
   };
 
   const handleDrop = (result: DropResult) => {
@@ -94,6 +98,7 @@ export const CellsGrid = () => {
                 isToday={isToday}
                 setShowHolidays={setShowHolidays}
                 showHolidays={showHolidays}
+                filteredValue={filteredValue}
               />
             );
           })}

@@ -52,29 +52,4 @@ export const StyledNavigation = styled.div`
       justify-content: center;
     }
   }
-
-  @media screen and (max-width: 768px) {
-    button {
-      padding: 0 10px;
-      font-size: 14px;
-      width: 100%;
-      &:nth-child(6) {
-        margin-right: 0;
-      }
-      &:nth-child(1) {
-        margin-left: 0;
-      }
-    }
-    div {
-      max-width: 200px;
-      width: 100%;
-      min-width: 100px;
-      min-height: 56px;
-      padding: 5px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
 `;

@@ -1,8 +1,10 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import { v4 } from 'uuid';
 import { format, setDate } from 'date-fns';
 import { TiDelete } from 'react-icons/ti';
 import {
+  addColorFilter,
+  colorFilterStateSelector,
   holidaysStateSelector,
   removeTask,
   selectDate,
@@ -12,8 +14,8 @@ import {
 } from 'app';
 import {
   CellAction,
-  CellActionMobile,
   CellButton,
+  CellColorLabel,
   DeleteTask,
   StyledCell,
   StyledTask,
@@ -31,6 +33,7 @@ interface IProps {
   showHolidays: { show: boolean; date: string };
   setShowHolidays: Dispatch<SetStateAction<{ show: boolean; date: string }>>;
   hasTasks: boolean;
+  filteredValue: string;
 }
 
 export const Cell: FC<IProps> = ({
@@ -41,13 +44,36 @@ export const Cell: FC<IProps> = ({
   setShowHolidays,
   hasTasks,
   showHolidays,
+  filteredValue,
 }) => {
   const tasks = useAppSelector(tasksStateSelector);
   const holidays = useAppSelector(holidaysStateSelector);
+  const colorFilter = useAppSelector(colorFilterStateSelector);
   const dispatch = useAppDispatch();
   const value = useAppSelector(selectedDateStateSelector);
+
   const validDate = () => {
     return value ? new Date(value) : new Date();
+  };
+  const [filteredWithColor, setFilteredWithColor] = useState(
+    colorFilter.find((el) => el.date === format(setDate(validDate(), date), 'yyyy-MM-dd'))
+  );
+
+  const handleSelectClick = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === '') {
+      setFilteredWithColor(undefined);
+    } else {
+      setFilteredWithColor({
+        date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
+        color: e.target.value,
+      });
+    }
+    dispatch(
+      addColorFilter({
+        date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
+        color: e.target.value,
+      })
+    );
   };
   return (
     <StyledCell key={v4()} isActive={isToday} isHolidays={isHolidays}>
@@ -56,6 +82,18 @@ export const Cell: FC<IProps> = ({
         <CellButton type="button" onClick={() => handleClickDate(date)}>
           +
         </CellButton>
+        <select
+          name="labels"
+          id="labels"
+          value={filteredWithColor?.color || ''}
+          onChange={handleSelectClick}
+        >
+          <option value="">Filter</option>
+          <option value="red">red</option>
+          <option value="orange">orange</option>
+          <option value="yellow">yellow</option>
+          <option value="green">green</option>
+        </select>
         {isHolidays && (
           <CellButton
             type="button"
@@ -73,12 +111,6 @@ export const Cell: FC<IProps> = ({
           </CellButton>
         )}
       </CellAction>
-      <CellActionMobile isActive={isToday}>
-        <button type="button" onClick={() => handleClickDate(date)}>
-          {date}
-          {hasTasks && <div />}
-        </button>
-      </CellActionMobile>
       {showHolidays.show &&
         format(setDate(validDate(), date), 'yyyy-MM-dd') === showHolidays.date && (
           <HolidaysModal
@@ -93,52 +125,71 @@ export const Cell: FC<IProps> = ({
             <TasksWrapper ref={provided.innerRef} {...provided.droppableProps}>
               {hasTasks &&
                 tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')].map((task, i) => {
-                  return (
-                    <Draggable key={task.id} draggableId={`${task.id}`} index={i}>
-                      {(providedDraggable) => {
-                        return (
-                          <StyledTask
-                            ref={providedDraggable.innerRef}
-                            {...providedDraggable.draggableProps}
-                            {...providedDraggable.dragHandleProps}
-                            draggable
-                            onClick={() => {
-                              if (date) {
-                                dispatch(
-                                  selectDate(format(setDate(validDate(), date), 'yyyy-MM-dd'))
-                                );
-                                dispatch(
-                                  showModalWindow({
-                                    show: true,
-                                    task: task.task,
-                                    taskId: task.id,
-                                  })
-                                );
-                              }
-                            }}
-                          >
-                            <span>{task.task}</span>
-                            <DeleteTask
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
+                  if (
+                    task.task.includes(filteredValue) &&
+                    (task.label.includes(filteredWithColor?.color || '') ||
+                      filteredWithColor === undefined)
+                  ) {
+                    return (
+                      <Draggable key={task.id} draggableId={`${task.id}`} index={i}>
+                        {(providedDraggable) => {
+                          return (
+                            <StyledTask
+                              ref={providedDraggable.innerRef}
+                              {...providedDraggable.draggableProps}
+                              {...providedDraggable.dragHandleProps}
+                              draggable
+                              onClick={() => {
                                 if (date) {
                                   dispatch(
-                                    removeTask({
-                                      date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-                                      id: task.id,
+                                    selectDate(format(setDate(validDate(), date), 'yyyy-MM-dd'))
+                                  );
+                                  dispatch(
+                                    showModalWindow({
+                                      show: true,
+                                      task: task.task,
+                                      taskId: task.id,
+                                      label: task.label,
                                     })
                                   );
                                 }
                               }}
                             >
-                              <TiDelete size={30} />
-                            </DeleteTask>
-                          </StyledTask>
-                        );
-                      }}
-                    </Draggable>
-                  );
+                              <span>{task.task}</span>
+                              {task.label.map((el) => {
+                                return (
+                                  <CellColorLabel
+                                    key={v4()}
+                                    red={el === 'red'}
+                                    orange={el === 'orange'}
+                                    green={el === 'green'}
+                                    yellow={el === 'yellow'}
+                                  />
+                                );
+                              })}
+                              <DeleteTask
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (date) {
+                                    dispatch(
+                                      removeTask({
+                                        date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
+                                        id: task.id,
+                                      })
+                                    );
+                                  }
+                                }}
+                              >
+                                <TiDelete size={30} />
+                              </DeleteTask>
+                            </StyledTask>
+                          );
+                        }}
+                      </Draggable>
+                    );
+                  }
+                  return null;
                 })}
               {provided.placeholder}
             </TasksWrapper>

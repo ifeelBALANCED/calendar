@@ -50,7 +50,6 @@ export const ModalInput = styled.input`
   font-size: 24px;
   border-radius: 10px;
   margin-bottom: 5px;
-  margin-top: 10px;
 `;
 
 export const EnterButton = styled.button`

@@ -14,6 +14,8 @@ interface IState {
   errorMessage: string;
   task: string;
   taskId: number | null;
+  label: string[];
+  colorFilter: { date: string; color: string }[];
 }
 
 const initialState: IState = {
@@ -27,11 +29,20 @@ const initialState: IState = {
   errorMessage: '',
   task: '',
   taskId: null,
+  label: [],
+  colorFilter: [],
 };
 export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
+    addColorFilter(state: IState, action: PayloadAction<{ date: string; color: string }>) {
+      if (action.payload.color === '') {
+        state.colorFilter = [...state.colorFilter].filter((el) => el.date !== action.payload.date);
+      } else {
+        state.colorFilter = [...state.colorFilter, action.payload];
+      }
+    },
     dragAndDrop(state: IState, action: PayloadAction<IDnd>) {
       const addElementsToTheDifferentCell = (
         from: ITask[],
@@ -93,15 +104,19 @@ export const calendarSlice = createSlice({
     },
     showModalWindow(
       state: IState,
-      action: PayloadAction<{ show: boolean; task: string; taskId: number | null }>
+      action: PayloadAction<{ show: boolean; task: string; taskId: number | null; label: string[] }>
     ) {
       state.showModal = action.payload.show;
       state.task = action.payload.task;
       state.taskId = action.payload.taskId;
+      state.label = action.payload.label;
     },
     addTask(
       state: IState,
-      action: PayloadAction<{ date: string | null; task: { text: string; id: number | null } }>
+      action: PayloadAction<{
+        date: string | null;
+        task: { text: string; id: number | null; label: string[] };
+      }>
     ) {
       const validDate = () => {
         return action.payload.date ? new Date(action.payload.date) : new Date();
@@ -115,6 +130,7 @@ export const calendarSlice = createSlice({
                 return {
                   id: action.payload.task.id,
                   task: action.payload.task.text,
+                  label: action.payload.task.label,
                 };
               }
               return el;
@@ -126,7 +142,7 @@ export const calendarSlice = createSlice({
           ...state.tasks,
           [format(validDate(), 'yyyy-MM-dd')]: [
             ...state.tasks[format(validDate(), 'yyyy-MM-dd')],
-            { id: Math.random(), task: action.payload.task.text },
+            { id: Math.random(), task: action.payload.task.text, label: action.payload.task.label },
           ],
         };
       } else {
@@ -136,6 +152,7 @@ export const calendarSlice = createSlice({
             {
               id: Math.random(),
               task: action.payload.task.text,
+              label: action.payload.task.label,
             },
           ],
         };
@@ -175,6 +192,13 @@ export const calendarSlice = createSlice({
   },
 });
 
-export const { handleSetToday, selectDate, showModalWindow, addTask, removeTask, dragAndDrop } =
-  calendarSlice.actions;
+export const {
+  handleSetToday,
+  selectDate,
+  showModalWindow,
+  addTask,
+  removeTask,
+  dragAndDrop,
+  addColorFilter,
+} = calendarSlice.actions;
 export const CalendarReducer = calendarSlice.reducer;

@@ -29,6 +29,16 @@ export const oneTaskStateSelector = createDraftSafeSelector(
   (state) => state.task
 );
 
+export const labelStateSelector = createDraftSafeSelector(
+  calendarGeneralSelector,
+  (state) => state.label
+);
+
+export const colorFilterStateSelector = createDraftSafeSelector(
+  calendarGeneralSelector,
+  (state) => state.colorFilter
+);
+
 export const idStateSelector = createDraftSafeSelector(
   calendarGeneralSelector,
   (state) => state.taskId

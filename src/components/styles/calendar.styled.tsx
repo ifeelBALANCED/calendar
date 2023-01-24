@@ -10,8 +10,4 @@ export const StyledCalendar = styled.div`
   ::-webkit-scrollbar {
     width: 0;
   }
-
-  @media screen and (max-width: 1024px) {
-    justify-content: flex-start;
-  }
 `;
