@@ -80,7 +80,7 @@ export const CellsGrid: FC<IProps> = ({ filteredValue }) => {
         ))}
 
         <DragDropContext onDragEnd={handleDrop}>
-          {Array.from({ length: numDays }).map((_, index) => {
+          {Array.from({ length: numDays })?.map((_, index) => {
             const date = index + 1;
             const isToday =
               format(setDate(validDate(), date), 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');

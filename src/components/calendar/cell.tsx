@@ -124,7 +124,7 @@ export const Cell: FC<IProps> = ({
           return (
             <TasksWrapper ref={provided.innerRef} {...provided.droppableProps}>
               {hasTasks &&
-                tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')].map((task, i) => {
+                tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')]?.map((task, i) => {
                   if (
                     task.task?.includes(filteredValue) &&
                     (task.label?.includes(filteredWithColor?.color || '') ||
@@ -156,7 +156,7 @@ export const Cell: FC<IProps> = ({
                               }}
                             >
                               <span>{task.task}</span>
-                              {task.label.map((el) => {
+                              {task.label?.map((el) => {
                                 return (
                                   <CellColorLabel
                                     key={v4()}
