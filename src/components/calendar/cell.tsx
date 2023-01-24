@@ -126,8 +126,8 @@ export const Cell: FC<IProps> = ({
               {hasTasks &&
                 tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')].map((task, i) => {
                   if (
-                    task.task.includes(filteredValue) &&
-                    (task.label.includes(filteredWithColor?.color || '') ||
+                    task.task?.includes(filteredValue) &&
+                    (task.label?.includes(filteredWithColor?.color || '') ||
                       filteredWithColor === undefined)
                   ) {
                     return (
