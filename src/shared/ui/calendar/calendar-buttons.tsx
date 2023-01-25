@@ -10,7 +10,7 @@ import {
   StyledImageWrapper,
   StyledInfo,
   StyledInfoBtn,
-} from 'entities/styles';
+} from 'shared/styles';
 
 export const CalendarButtons = () => {
   const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { CellButton, FilterColorBtn } from 'entities/styles';
+import { CellButton, FilterColorBtn } from 'shared/styles';
 import { format, setDate } from 'date-fns';
 import { useAppSelector } from 'shared/hooks';
 import { selectedDateStateSelector } from 'app';

@@ -22,8 +22,8 @@ import {
   StyledInnerTask,
   StyledTask,
   TasksWrapper,
-} from 'entities/styles';
-import { HolidaysModal } from 'entities/ui/modals';
+} from 'shared/styles';
+import { HolidaysModal } from 'shared/ui/modals';
 import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { ITask } from 'shared/types';

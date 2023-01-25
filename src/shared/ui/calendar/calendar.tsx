@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { differenceInDays, endOfMonth, format, setDate, startOfMonth } from 'date-fns';
-import { Grid, StyledCalendar, StyledCell } from 'entities/styles';
+import { Grid, StyledCalendar, StyledCell } from 'shared/styles';
 import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import {
   dragAndDrop,

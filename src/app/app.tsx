@@ -1,9 +1,9 @@
-import { Background, Calendar, CalendarButtons, Filter, Modal, Navigation } from 'entities';
+import { Background, Calendar, CalendarButtons, Filter, Modal, Navigation } from 'shared';
 import React, { useEffect } from 'react';
 import { add, format, sub } from 'date-fns';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'shared/hooks';
-import { WrapperStyled } from 'entities/styles';
+import { WrapperStyled } from 'shared/styles';
 import { holidaysThunk, modalStateSelector, selectDate, selectedDateStateSelector } from './store';
 
 const StyledApp = styled.div`

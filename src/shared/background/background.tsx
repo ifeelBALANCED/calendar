@@ -1,4 +1,4 @@
-import { StyledBackground } from 'entities/styles';
+import { StyledBackground } from 'shared/styles';
 
 export const Background = () => {
   return (
