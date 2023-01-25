@@ -1,4 +1,11 @@
-import { Background, Calendar, Filter, Navigation, WrapperStyled } from 'components';
+import {
+  Background,
+  Calendar,
+  CalendarActions,
+  Filter,
+  Navigation,
+  WrapperStyled,
+} from 'components';
 import React, { useEffect, useState } from 'react';
 import { add, format, sub } from 'date-fns';
 import styled from 'styled-components';
@@ -46,7 +53,10 @@ export const App = () => {
           nextMonth={nextMonth}
           nextYear={nextYear}
         />
-        <Filter value={filterValue} setValue={setFilterValue} />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Filter value={filterValue} setValue={setFilterValue} />
+          <CalendarActions />
+        </div>
         <Calendar filteredValue={filterValue} />
       </WrapperStyled>
     </StyledApp>

@@ -45,12 +45,19 @@ export const StyledTask = styled.div`
   border-radius: 10px;
   color: #000;
   background-color: white;
-  padding: 0 5px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 5px;
   font-size: 16px;
+  min-height: 30px;
+  padding: 5px;
+
+  section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   span {
     max-width: 300px;
     overflow: hidden;
@@ -91,27 +98,51 @@ export const CellAction = styled.div`
   align-items: center;
 `;
 
-export const StyledHolidays = styled.div`
-  background-color: #efefef;
-  border-radius: 5px;
-  padding: 5px;
+export const ColorLabelsWrapper = styled.div`
+  display: flex;
 `;
-
 export const CellColorLabel = styled.div`
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 100%;
+  height: 5px;
+  margin: 0 1px;
+  border-radius: 2px;
 
-  ${(props: { red?: boolean; orange?: boolean; yellow?: boolean; green?: boolean }) => {
+  ${(props: { red?: boolean; orange?: boolean; green?: boolean }) => {
     if (props.red) {
       return 'background-color: red';
     }
     if (props.orange) {
       return 'background-color: orange';
     }
-    if (props.yellow) {
-      return 'background-color: yellow';
-    }
     return 'background-color: green';
+  }}
+`;
+
+export const FilterColorBtn = styled.button`
+  width: 16px;
+  height: 16px;
+  border-radius: 50px;
+  border: none;
+  margin: 0 5px;
+  cursor: pointer;
+
+  ${(props: { red?: boolean; orange?: boolean; green?: boolean; active?: boolean }) => {
+    if (props.red && props.active) {
+      return 'background-color: red';
+    }
+    if (props.red) {
+      return 'background-color: rgba(255, 0, 0, 0.41)';
+    }
+    if (props.orange && props.active) {
+      return 'background-color: orange';
+    }
+    if (props.orange) {
+      return 'background-color: rgba(255, 165, 0, 0.41)';
+    }
+    if (props.green && props.active) {
+      return 'background-color: green';
+    }
+    return 'background-color: rgba(0, 128, 0, 0.41)';
   }}
 `;

@@ -8,12 +8,12 @@ export const StyledFilter = styled.div`
   input {
     max-width: 640px;
     width: 100%;
-    font-size: 30px;
+    font-size: 24px;
     outline: none;
     border: none;
     border-radius: 10px;
-    padding: 5px 15px;
-    margin: 0 0 5px 0;
+    padding: 15px 15px;
+    margin: 0 2px 5px 0;
 
     ::placeholder {
       color: #c8c8c8;

@@ -38,6 +38,7 @@ specifiers:
   react: ^18.2.0
   react-beautiful-dnd: ^13.1.1
   react-dom: ^18.2.0
+  react-file-reader: ^1.1.4
   react-hook-form: ^7.41.2
   react-icons: ^4.7.1
   react-redux: ^8.0.5
@@ -95,6 +96,7 @@ devDependencies:
   lint-staged: 13.1.0
   pre-commit: 1.2.2
   prettier: 2.8.3
+  react-file-reader: 1.1.4
   styled-components: 5.3.6_biqbaboplfbrettd7655fr4n2y
   typescript: 4.9.4
   vite: 3.2.5
@@ -3181,6 +3183,13 @@ packages:
       react: 18.2.0
       scheduler: 0.23.0
 
+  /react-file-reader/1.1.4:
+    resolution: {integrity: sha512-xTeHFrDIopZpzk4aMZyILzIQbytQ6GCKR32/7kBDzO5lrAr1idbK5PkmpjP4wnT9s5F+TALviuhnWk8UeksddA==}
+    dependencies:
+      prop-types: 15.8.1
+      uuid4: 1.1.4
+    dev: true
+
   /react-hook-form/7.42.1_react@18.2.0:
     resolution: {integrity: sha512-2UIGqwMZksd5HS55crTT1ATLTr0rAI4jS7yVuqTaoRVDhY2Qc4IyjskCmpnmdYqUNOYFy04vW253tb2JRVh+IQ==}
     engines: {node: '>=12.22.0'}
@@ -3884,6 +3893,10 @@ packages:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
     dev: false
+
+  /uuid4/1.1.4:
+    resolution: {integrity: sha512-Gr1q2k40LpF8CokcnQFjPDsdslzJbTCTBG5xQIEflUov431gFkY5KduiGIeKYAamkQnNn4IfdHJbLnl9Bib8TQ==}
+    dev: true
 
   /vite-tsconfig-paths/3.6.0_vite@3.2.5:
     resolution: {integrity: sha512-UfsPYonxLqPD633X8cWcPFVuYzx/CMNHAjZTasYwX69sXpa4gNmQkR0XCjj82h7zhLGdTWagMjC1qfb9S+zv0A==}

@@ -36,6 +36,9 @@ export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
+    loadTasks(state: IState, action: PayloadAction<DynamicDates>) {
+      state.tasks = action.payload;
+    },
     addColorFilter(state: IState, action: PayloadAction<{ date: string; color: string }>) {
       if (action.payload.color === '') {
         state.colorFilter = [...state.colorFilter].filter((el) => el.date !== action.payload.date);
@@ -200,5 +203,6 @@ export const {
   removeTask,
   dragAndDrop,
   addColorFilter,
+  loadTasks,
 } = calendarSlice.actions;
 export const CalendarReducer = calendarSlice.reducer;

@@ -11,7 +11,15 @@ import {
 } from 'app';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { MdClose } from 'react-icons/md';
-import { CloseButton, EnterButton, ModalInput, ModalWrap, OverLay } from '../styles';
+import {
+  CloseButton,
+  EnterButton,
+  ModalInput,
+  ModalLabel,
+  ModalLabelsWrapper,
+  ModalWrap,
+  OverLay,
+} from '../styles';
 
 export const Modal = () => {
   const taskId = useAppSelector(idStateSelector);
@@ -67,52 +75,40 @@ export const Modal = () => {
           onChange={(e) => setModalTask(e.target.value)}
         />
         <EnterButton type="button" onClick={() => submitTask()}>
-          enter
+          save
         </EnterButton>
-        <label>
-          Red
-          <input
-            type="checkbox"
-            checked={taskLabel.includes('red')}
-            id="red"
-            name="red"
-            value="red"
-            onChange={handleCheckboxChange}
-          />
-        </label>
-        <label>
-          Orange
-          <input
-            type="checkbox"
-            checked={taskLabel.includes('orange')}
-            id="orange"
-            name="orange"
-            value="orange"
-            onChange={handleCheckboxChange}
-          />
-        </label>
-        <label>
-          Yellow
-          <input
-            type="checkbox"
-            checked={taskLabel.includes('yellow')}
-            id="yellow"
-            name="yellow"
-            value="yellow"
-            onChange={handleCheckboxChange}
-          />
-        </label>
-        <label>
-          Green
-          <input
-            type="checkbox"
-            checked={taskLabel.includes('green')}
-            id="green"
-            name="green"
-            value="green"
-            onChange={handleCheckboxChange}
-          />
-        </label>
+        <ModalLabelsWrapper>
+          <ModalLabel red checkedRed={taskLabel.includes('red')}>
+            <input
+              type="checkbox"
+              checked={taskLabel.includes('red')}
+              id="red"
+              name="red"
+              value="red"
+              onChange={handleCheckboxChange}
+            />
+          </ModalLabel>
+          <ModalLabel orange checkedOrange={taskLabel.includes('orange')}>
+            <input
+              type="checkbox"
+              checked={taskLabel.includes('orange')}
+              id="orange"
+              name="orange"
+              value="orange"
+              onChange={handleCheckboxChange}
+            />
+          </ModalLabel>
+          <ModalLabel green checkedGreen={taskLabel.includes('green')}>
+            <input
+              type="checkbox"
+              checked={taskLabel.includes('green')}
+              id="green"
+              name="green"
+              value="green"
+              onChange={handleCheckboxChange}
+            />
+          </ModalLabel>
+        </ModalLabelsWrapper>
       </ModalWrap>
     </OverLay>
   );

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { v4 } from 'uuid';
 import { format, setDate } from 'date-fns';
 import { TiDelete } from 'react-icons/ti';
@@ -16,7 +16,9 @@ import {
   CellAction,
   CellButton,
   CellColorLabel,
+  ColorLabelsWrapper,
   DeleteTask,
+  FilterColorBtn,
   StyledCell,
   StyledTask,
   TasksWrapper,
@@ -59,19 +61,19 @@ export const Cell: FC<IProps> = ({
     colorFilter.find((el) => el.date === format(setDate(validDate(), date), 'yyyy-MM-dd'))
   );
 
-  const handleSelectClick = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === '') {
+  const handleFilterClick = (color: string) => {
+    if (color === '') {
       setFilteredWithColor(undefined);
     } else {
       setFilteredWithColor({
         date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-        color: e.target.value,
+        color,
       });
     }
     dispatch(
       addColorFilter({
         date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-        color: e.target.value,
+        color,
       })
     );
   };
@@ -82,18 +84,6 @@ export const Cell: FC<IProps> = ({
         <CellButton type="button" onClick={() => handleClickDate(date)}>
           +
         </CellButton>
-        <select
-          name="labels"
-          id="labels"
-          value={filteredWithColor?.color || ''}
-          onChange={handleSelectClick}
-        >
-          <option value="">Filter</option>
-          <option value="red">red</option>
-          <option value="orange">orange</option>
-          <option value="yellow">yellow</option>
-          <option value="green">green</option>
-        </select>
         {isHolidays && (
           <CellButton
             type="button"
@@ -110,6 +100,21 @@ export const Cell: FC<IProps> = ({
             !
           </CellButton>
         )}
+        <FilterColorBtn
+          red
+          active={filteredWithColor?.color === 'red'}
+          onClick={() => handleFilterClick(filteredWithColor?.color === 'red' ? '' : 'red')}
+        />
+        <FilterColorBtn
+          orange
+          active={filteredWithColor?.color === 'orange'}
+          onClick={() => handleFilterClick(filteredWithColor?.color === 'orange' ? '' : 'orange')}
+        />
+        <FilterColorBtn
+          green
+          active={filteredWithColor?.color === 'green'}
+          onClick={() => handleFilterClick(filteredWithColor?.color === 'green' ? '' : 'green')}
+        />
       </CellAction>
       {showHolidays.show &&
         format(setDate(validDate(), date), 'yyyy-MM-dd') === showHolidays.date && (
@@ -155,34 +160,37 @@ export const Cell: FC<IProps> = ({
                                 }
                               }}
                             >
-                              <span>{task.task}</span>
-                              {task.label?.map((el) => {
-                                return (
-                                  <CellColorLabel
-                                    key={v4()}
-                                    red={el === 'red'}
-                                    orange={el === 'orange'}
-                                    green={el === 'green'}
-                                    yellow={el === 'yellow'}
-                                  />
-                                );
-                              })}
-                              <DeleteTask
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (date) {
-                                    dispatch(
-                                      removeTask({
-                                        date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-                                        id: task.id,
-                                      })
-                                    );
-                                  }
-                                }}
-                              >
-                                <TiDelete size={30} />
-                              </DeleteTask>
+                              <section>
+                                <span>{task.task}</span>
+                                <DeleteTask
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (date) {
+                                      dispatch(
+                                        removeTask({
+                                          date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
+                                          id: task.id,
+                                        })
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <TiDelete size={30} />
+                                </DeleteTask>
+                              </section>
+                              <ColorLabelsWrapper>
+                                {task.label?.map((el) => {
+                                  return (
+                                    <CellColorLabel
+                                      key={v4()}
+                                      red={el === 'red'}
+                                      orange={el === 'orange'}
+                                      green={el === 'green'}
+                                    />
+                                  );
+                                })}
+                              </ColorLabelsWrapper>
                             </StyledTask>
                           );
                         }}
