@@ -5,11 +5,16 @@ import html2canvas from 'html2canvas';
 import { DynamicDates } from 'types';
 import { loadTasks, tasksStateSelector } from 'app';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { CalendarActionsStyled } from '../styles/calendar-actions.styled';
+import {
+  CalendarActionsStyled,
+  StyledInfo,
+  StyledInfoBtn,
+} from '../styles/calendar-actions.styled';
 
 export const CalendarActions = () => {
   const dispatch = useAppDispatch();
   const [image, setImage] = useState<string | null>();
+  const [showInfo, setShowInfo] = useState(false);
   const tasks = useAppSelector(tasksStateSelector);
 
   const download = () => {
@@ -54,7 +59,34 @@ export const CalendarActions = () => {
             reader.readAsText(file);
           }}
         >
-          <button type="button">Import</button>
+          <button type="button" style={{ position: 'relative' }}>
+            Import{' '}
+            <StyledInfoBtn
+              onMouseOver={() => setShowInfo(true)}
+              onMouseLeave={() => setShowInfo(false)}
+            >
+              !
+            </StyledInfoBtn>
+            {showInfo && (
+              <StyledInfo>
+                <h2>JSON example</h2>
+                <pre>
+                  {JSON.stringify(
+                    {
+                      tasks: {
+                        '2023-01-04': [
+                          { id: 1, task: 'task1', label: ['red', 'green'] },
+                          { id: 2, task: 'task2', label: ['red'] },
+                        ],
+                      },
+                    },
+                    null,
+                    2
+                  )}
+                </pre>
+              </StyledInfo>
+            )}
+          </button>
         </ReactFileReader>
       </div>
       <button

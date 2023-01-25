@@ -48,18 +48,3 @@ export const modalStateSelector = createDraftSafeSelector(
   calendarGeneralSelector,
   (state) => state.showModal
 );
-
-export const isLoadingStateSelector = createDraftSafeSelector(
-  calendarGeneralSelector,
-  (state) => state.isLoading
-);
-
-export const isErrorStateSelector = createDraftSafeSelector(
-  calendarGeneralSelector,
-  (state) => state.isError
-);
-
-export const errorMessageStateSelector = createDraftSafeSelector(
-  calendarGeneralSelector,
-  (state) => state.errorMessage
-);

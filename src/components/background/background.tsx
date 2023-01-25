@@ -1,17 +1,8 @@
+import { StyledBackground } from 'components/styles';
+
 export const Background = () => {
   return (
-    <svg
-      style={{
-        position: 'fixed',
-        margin: 0,
-        width: '100%',
-        fill: '#272727',
-        height: '100%',
-        zIndex: 0,
-      }}
-      viewBox="0 0 100 100"
-      preserveAspectRatio="xMidYMid slice"
-    >
+    <StyledBackground viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
       <path d="M50,50l100,-26.7949l0,53.5898z">
         <animateTransform
           attributeName="transform"
@@ -78,6 +69,6 @@ export const Background = () => {
           repeatCount="indefinite"
         />
       </path>
-    </svg>
+    </StyledBackground>
   );
 };

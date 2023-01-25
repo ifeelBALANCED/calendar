@@ -5,3 +5,4 @@ export * from './modal.styled';
 export * from './navigation.styled';
 export * from './wrapper.styled';
 export * from './filter.styled';
+export * from './background.styled';

@@ -1,7 +1,6 @@
-import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DynamicDates, IDnd, IHolidays, ITask } from 'types';
 import { format } from 'date-fns';
-import { holidaysThunk } from '../thunk';
 
 interface IState {
   holidays: IHolidays[];
@@ -9,9 +8,6 @@ interface IState {
   showModal: boolean;
   today: string | null;
   tasks: DynamicDates;
-  isLoading: boolean;
-  isError: boolean;
-  errorMessage: string;
   task: string;
   taskId: number | null;
   label: string[];
@@ -24,9 +20,6 @@ const initialState: IState = {
   showModal: false,
   today: null,
   tasks: {},
-  isLoading: false,
-  isError: false,
-  errorMessage: '',
   task: '',
   taskId: null,
   label: [],
@@ -172,26 +165,6 @@ export const calendarSlice = createSlice({
         delete state.tasks[action.payload.date];
       }
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(holidaysThunk.pending, (state: IState) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = '';
-      })
-      .addCase(holidaysThunk.fulfilled, (state: IState, action: PayloadAction<IHolidays[]>) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.errorMessage = '';
-        state.holidays = action.payload;
-      })
-      .addCase(holidaysThunk.rejected, (state: IState, action: AnyAction) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
-        state.holidays = [];
-      });
   },
 });
 
