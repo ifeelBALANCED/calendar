@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DynamicDates, IDnd, IHolidays, ITask } from 'shared/types';
 import { format } from 'date-fns';
+import { v4 } from 'uuid';
 import { holidaysThunk } from '../thunk';
 
 interface IState {
@@ -10,7 +11,7 @@ interface IState {
   today: string | null;
   tasks: DynamicDates;
   task: string;
-  taskId: number | null;
+  taskId: string | null;
   label: string[];
   colorFilter: { date: string; color: string }[];
   filterText: string;
@@ -106,7 +107,7 @@ export const calendarSlice = createSlice({
     },
     showModalWindow(
       state: IState,
-      action: PayloadAction<{ show: boolean; task: string; taskId: number | null; label: string[] }>
+      action: PayloadAction<{ show: boolean; task: string; taskId: string | null; label: string[] }>
     ) {
       state.showModal = action.payload.show;
       state.task = action.payload.task;
@@ -117,7 +118,7 @@ export const calendarSlice = createSlice({
       state: IState,
       action: PayloadAction<{
         date: string | null;
-        task: { text: string; id: number | null; label: string[] };
+        task: { text: string; id: string | null; label: string[] };
       }>
     ) {
       const validDate = () => {
@@ -144,7 +145,7 @@ export const calendarSlice = createSlice({
           ...state.tasks,
           [format(validDate(), 'yyyy-MM-dd')]: [
             ...state.tasks[format(validDate(), 'yyyy-MM-dd')],
-            { id: Math.random(), task: action.payload.task.text, label: action.payload.task.label },
+            { id: v4(), task: action.payload.task.text, label: action.payload.task.label },
           ],
         };
       } else {
@@ -152,7 +153,7 @@ export const calendarSlice = createSlice({
           ...state.tasks,
           [format(validDate(), 'yyyy-MM-dd')]: [
             {
-              id: Math.random(),
+              id: v4(),
               task: action.payload.task.text,
               label: action.payload.task.label,
             },
@@ -160,7 +161,7 @@ export const calendarSlice = createSlice({
         };
       }
     },
-    removeTask(state: IState, action: PayloadAction<{ date: string; id: number }>) {
+    removeTask(state: IState, action: PayloadAction<{ date: string; id: string }>) {
       state.tasks = {
         ...state.tasks,
         [action.payload.date]: [...state.tasks[action.payload.date]].filter(
