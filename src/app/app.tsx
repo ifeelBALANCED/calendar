@@ -1,15 +1,9 @@
-import {
-  Background,
-  Calendar,
-  CalendarActions,
-  Filter,
-  Navigation,
-  WrapperStyled,
-} from 'components';
-import React, { useEffect, useState } from 'react';
+import { Background, Calendar, CalendarButtons, Filter, Modal, Navigation } from 'entities';
+import React, { useEffect } from 'react';
 import { add, format, sub } from 'date-fns';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
+import { WrapperStyled } from 'entities/styles';
 import { holidaysThunk, modalStateSelector, selectDate, selectedDateStateSelector } from './store';
 
 const StyledApp = styled.div`
@@ -24,14 +18,10 @@ export const App = () => {
   const dispatch = useAppDispatch();
   const value = useAppSelector(selectedDateStateSelector);
   const showModal = useAppSelector(modalStateSelector);
-  const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
     dispatch(holidaysThunk());
-    if (showModal) {
-      setFilterValue('');
-    }
-  }, [dispatch, showModal]);
+  }, [dispatch]);
 
   const validDate = () => {
     return value ? new Date(value) : new Date();
@@ -54,10 +44,11 @@ export const App = () => {
           nextYear={nextYear}
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Filter value={filterValue} setValue={setFilterValue} />
-          <CalendarActions />
+          <Filter />
+          <CalendarButtons />
         </div>
-        <Calendar filteredValue={filterValue} />
+        <Calendar />
+        {showModal && <Modal />}
       </WrapperStyled>
     </StyledApp>
   );

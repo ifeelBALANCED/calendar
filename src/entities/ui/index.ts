@@ -1,3 +1,4 @@
 export * from './calendar';
+export * from './filter';
 export * from './navigation';
-export * from './calendar-actions';
+export * from './modals';

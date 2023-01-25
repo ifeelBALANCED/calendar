@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DynamicDates, IDnd, IHolidays, ITask } from 'types';
+import { DynamicDates, IDnd, IHolidays, ITask } from 'shared/types';
 import { format } from 'date-fns';
 
 interface IState {
@@ -12,6 +12,7 @@ interface IState {
   taskId: number | null;
   label: string[];
   colorFilter: { date: string; color: string }[];
+  filterText: string;
 }
 
 const initialState: IState = {
@@ -24,11 +25,15 @@ const initialState: IState = {
   taskId: null,
   label: [],
   colorFilter: [],
+  filterText: '',
 };
 export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
+    changeFilterText(state: IState, action: PayloadAction<string>) {
+      state.filterText = action.payload;
+    },
     loadTasks(state: IState, action: PayloadAction<DynamicDates>) {
       state.tasks = action.payload;
     },
@@ -177,5 +182,6 @@ export const {
   dragAndDrop,
   addColorFilter,
   loadTasks,
+  changeFilterText,
 } = calendarSlice.actions;
 export const CalendarReducer = calendarSlice.reducer;

@@ -53,15 +53,16 @@ export const StyledTask = styled.div`
   min-height: 30px;
   padding: 5px;
 
-  section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
   span {
     max-width: 300px;
     overflow: hidden;
   }
+`;
+
+export const StyledInnerTask = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const TasksWrapper = styled.div`

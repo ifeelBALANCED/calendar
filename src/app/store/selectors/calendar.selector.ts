@@ -39,6 +39,10 @@ export const colorFilterStateSelector = createDraftSafeSelector(
   (state) => state.colorFilter
 );
 
+export const textFilterStateSelector = createDraftSafeSelector(
+  calendarGeneralSelector,
+  (state) => state.filterText
+);
 export const idStateSelector = createDraftSafeSelector(
   calendarGeneralSelector,
   (state) => state.taskId

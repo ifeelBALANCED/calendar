@@ -9,7 +9,7 @@ import {
   selectedDateStateSelector,
   showModalWindow,
 } from 'app';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import { MdClose } from 'react-icons/md';
 import {
   CloseButton,
@@ -19,7 +19,7 @@ import {
   ModalLabelsWrapper,
   ModalWrap,
   OverLay,
-} from '../styles';
+} from '../../styles';
 
 export const Modal = () => {
   const taskId = useAppSelector(idStateSelector);

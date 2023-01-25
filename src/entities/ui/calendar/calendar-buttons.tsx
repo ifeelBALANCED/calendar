@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import ReactFileReader from 'react-file-reader';
 import { saveAs } from 'file-saver';
 import html2canvas from 'html2canvas';
-import { DynamicDates } from 'types';
+import { DynamicDates } from 'shared/types';
 import { loadTasks, tasksStateSelector } from 'app';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import {
-  CalendarActionsStyled,
+  CalendarButtonsStyled,
+  StyledImageWrapper,
   StyledInfo,
   StyledInfoBtn,
-} from '../styles/calendar-actions.styled';
+} from 'entities/styles';
 
-export const CalendarActions = () => {
+export const CalendarButtons = () => {
   const dispatch = useAppDispatch();
   const [image, setImage] = useState<string | null>();
   const [showInfo, setShowInfo] = useState(false);
@@ -31,7 +32,7 @@ export const CalendarActions = () => {
     return arg.tasks !== undefined;
   };
   return (
-    <CalendarActionsStyled>
+    <CalendarButtonsStyled>
       <button type="button" onClick={() => download()}>
         Print
       </button>
@@ -99,19 +100,7 @@ export const CalendarActions = () => {
         Export
       </button>
       {image && (
-        <div
-          style={{
-            position: 'absolute',
-            backgroundColor: 'white',
-            padding: '10px',
-            borderRadius: '10px',
-            zIndex: 100,
-            width: '800px',
-            minHeight: '450px',
-            right: '50%',
-            transform: 'translateX(50%)',
-          }}
-        >
+        <StyledImageWrapper>
           <img style={{ maxWidth: '100%', maxHeight: '100%' }} src={image} alt="" />
           <button
             type="button"
@@ -124,8 +113,8 @@ export const CalendarActions = () => {
           <button type="button" onClick={() => setImage(null)}>
             close
           </button>
-        </div>
+        </StyledImageWrapper>
       )}
-    </CalendarActionsStyled>
+    </CalendarButtonsStyled>
   );
 };

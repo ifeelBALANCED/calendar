@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { differenceInDays, endOfMonth, format, setDate, startOfMonth } from 'date-fns';
-import { Grid, StyledCalendar, StyledCell } from 'components/styles';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { Grid, StyledCalendar, StyledCell } from 'entities/styles';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import {
   dragAndDrop,
   holidaysStateSelector,
@@ -12,13 +12,9 @@ import {
 } from 'app';
 import { v4 } from 'uuid';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Cell } from './cell';
+import { Cell } from './cells';
 
-interface IProps {
-  filteredValue: string;
-}
-
-export const CellsGrid: FC<IProps> = ({ filteredValue }) => {
+export const Calendar = () => {
   const dispatch = useAppDispatch();
   const holidays = useAppSelector(holidaysStateSelector);
   const value = useAppSelector(selectedDateStateSelector);
@@ -98,7 +94,6 @@ export const CellsGrid: FC<IProps> = ({ filteredValue }) => {
                 isToday={isToday}
                 setShowHolidays={setShowHolidays}
                 showHolidays={showHolidays}
-                filteredValue={filteredValue}
               />
             );
           })}

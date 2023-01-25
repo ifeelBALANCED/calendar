@@ -11,21 +11,23 @@ import {
   selectedDateStateSelector,
   showModalWindow,
   tasksStateSelector,
+  textFilterStateSelector,
 } from 'app';
 import {
   CellAction,
-  CellButton,
   CellColorLabel,
   ColorLabelsWrapper,
   DeleteTask,
-  FilterColorBtn,
   StyledCell,
+  StyledInnerTask,
   StyledTask,
   TasksWrapper,
-} from 'components/styles';
-import { HolidaysModal } from 'components/modal';
-import { useAppDispatch, useAppSelector } from 'hooks';
+} from 'entities/styles';
+import { HolidaysModal } from 'entities/ui/modals';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { ITask } from 'shared/types';
+import { CellButtons } from './cell-buttons';
 
 interface IProps {
   isToday: boolean;
@@ -35,7 +37,6 @@ interface IProps {
   showHolidays: { show: boolean; date: string };
   setShowHolidays: Dispatch<SetStateAction<{ show: boolean; date: string }>>;
   hasTasks: boolean;
-  filteredValue: string;
 }
 
 export const Cell: FC<IProps> = ({
@@ -46,13 +47,13 @@ export const Cell: FC<IProps> = ({
   setShowHolidays,
   hasTasks,
   showHolidays,
-  filteredValue,
 }) => {
   const tasks = useAppSelector(tasksStateSelector);
   const holidays = useAppSelector(holidaysStateSelector);
   const colorFilter = useAppSelector(colorFilterStateSelector);
   const dispatch = useAppDispatch();
   const value = useAppSelector(selectedDateStateSelector);
+  const filteredValue = useAppSelector(textFilterStateSelector);
 
   const validDate = () => {
     return value ? new Date(value) : new Date();
@@ -60,6 +61,13 @@ export const Cell: FC<IProps> = ({
   const [filteredWithColor, setFilteredWithColor] = useState(
     colorFilter.find((el) => el.date === format(setDate(validDate(), date), 'yyyy-MM-dd'))
   );
+
+  const showTasks = (task: ITask) => {
+    return (
+      task.task?.includes(filteredValue) &&
+      (task.label?.includes(filteredWithColor?.color || '') || filteredWithColor === undefined)
+    );
+  };
 
   const handleFilterClick = (color: string) => {
     if (color === '') {
@@ -81,39 +89,13 @@ export const Cell: FC<IProps> = ({
     <StyledCell key={v4()} isActive={isToday} isHolidays={isHolidays}>
       <CellAction>
         {date}
-        <CellButton type="button" onClick={() => handleClickDate(date)}>
-          +
-        </CellButton>
-        {isHolidays && (
-          <CellButton
-            type="button"
-            onClick={() =>
-              setShowHolidays((prevState) => {
-                return {
-                  ...prevState,
-                  show: true,
-                  date: format(setDate(validDate(), date), 'yyyy-MM-dd'),
-                };
-              })
-            }
-          >
-            !
-          </CellButton>
-        )}
-        <FilterColorBtn
-          red
-          active={filteredWithColor?.color === 'red'}
-          onClick={() => handleFilterClick(filteredWithColor?.color === 'red' ? '' : 'red')}
-        />
-        <FilterColorBtn
-          orange
-          active={filteredWithColor?.color === 'orange'}
-          onClick={() => handleFilterClick(filteredWithColor?.color === 'orange' ? '' : 'orange')}
-        />
-        <FilterColorBtn
-          green
-          active={filteredWithColor?.color === 'green'}
-          onClick={() => handleFilterClick(filteredWithColor?.color === 'green' ? '' : 'green')}
+        <CellButtons
+          date={date}
+          filteredWithColor={filteredWithColor}
+          handleClickDate={handleClickDate}
+          handleFilterClick={handleFilterClick}
+          isHolidays={isHolidays}
+          setShowHolidays={setShowHolidays}
         />
       </CellAction>
       {showHolidays.show &&
@@ -130,11 +112,7 @@ export const Cell: FC<IProps> = ({
             <TasksWrapper ref={provided.innerRef} {...provided.droppableProps}>
               {hasTasks &&
                 tasks[format(setDate(validDate(), date), 'yyyy-MM-dd')]?.map((task, i) => {
-                  if (
-                    task.task?.includes(filteredValue) &&
-                    (task.label?.includes(filteredWithColor?.color || '') ||
-                      filteredWithColor === undefined)
-                  ) {
+                  if (showTasks(task)) {
                     return (
                       <Draggable key={task.id} draggableId={`${task.id}`} index={i}>
                         {(providedDraggable) => {
@@ -160,7 +138,7 @@ export const Cell: FC<IProps> = ({
                                 }
                               }}
                             >
-                              <section>
+                              <StyledInnerTask>
                                 <span>{task.task}</span>
                                 <DeleteTask
                                   type="button"
@@ -178,7 +156,7 @@ export const Cell: FC<IProps> = ({
                                 >
                                   <TiDelete size={30} />
                                 </DeleteTask>
-                              </section>
+                              </StyledInnerTask>
                               <ColorLabelsWrapper>
                                 {task.label?.map((el) => {
                                   return (

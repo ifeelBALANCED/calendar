@@ -1,26 +1,22 @@
-import { PropsWithChildren, StrictMode } from 'react';
-import { createGlobalStyle } from 'styled-components';
-import { Provider } from 'react-redux';
+import { ComponentType, PropsWithChildren, ProviderProps, ReactElement, StrictMode } from 'react';
+import { Provider as StoreProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from '../store';
 
-const Global = createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
-  }
-`;
-export const AllProviders = ({ children }: PropsWithChildren<unknown>) => {
-  return (
-    <StrictMode>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <Global />
-          {children}
-        </PersistGate>
-      </Provider>
-    </StrictMode>
-  );
-};
+type IProviderOrWithValue<T = any> = ComponentType<T> | [ComponentType<T>, T];
+export const combineProviders =
+  (providers: Array<IProviderOrWithValue>) =>
+  ({ children }: PropsWithChildren<{ value?: unknown[] }>) =>
+    providers.reduceRight<ReactElement<ProviderProps<unknown>>>((tree, ProviderOrWithValue) => {
+      if (Array.isArray(ProviderOrWithValue)) {
+        const [Provider, value] = ProviderOrWithValue;
+        return <Provider {...value}>{tree}</Provider>;
+      }
+      return <ProviderOrWithValue>{tree}</ProviderOrWithValue>;
+    }, children as ReactElement);
+
+export const AllProviders = combineProviders([
+  [StrictMode, {}],
+  [StoreProvider, { store }],
+  [PersistGate, { persistor }],
+]);

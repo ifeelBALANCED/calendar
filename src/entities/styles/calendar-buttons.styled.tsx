@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CalendarActionsStyled = styled.div`
+export const CalendarButtonsStyled = styled.div`
   display: flex;
   button {
     padding: 18px 15px;
@@ -40,4 +40,16 @@ export const StyledInfo = styled.div`
   background-color: #151515;
   text-align: left;
   padding: 10px;
+`;
+
+export const StyledImageWrapper = styled.div`
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 100;
+  width: 800px;
+  min-height: 450px;
+  right: 50%;
+  transform: translateX(50%);
 `;

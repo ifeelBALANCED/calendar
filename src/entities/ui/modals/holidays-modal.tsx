@@ -1,7 +1,7 @@
 import { MdClose } from 'react-icons/md';
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { IHolidays } from 'types';
-import { CloseButton, ModalWrap, OverLay, StyledHoliday } from '../styles';
+import { IHolidays } from 'shared/types';
+import { CloseButton, ModalWrap, OverLay, StyledHoliday } from '../../styles';
 
 interface IProps {
   setShowHolidays: Dispatch<SetStateAction<{ show: boolean; date: string }>>;
