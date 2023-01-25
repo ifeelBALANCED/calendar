@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DynamicDates, IDnd, IHolidays, ITask } from 'shared/types';
 import { format } from 'date-fns';
+import { holidaysThunk } from '../thunk';
 
 interface IState {
   holidays: IHolidays[];
@@ -170,6 +171,11 @@ export const calendarSlice = createSlice({
         delete state.tasks[action.payload.date];
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(holidaysThunk.fulfilled, (state: IState, action) => {
+      state.holidays = action.payload;
+    });
   },
 });
 

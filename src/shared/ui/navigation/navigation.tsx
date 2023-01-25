@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import { handleSetToday, selectedDateStateSelector } from 'app';
-import { StyledNavigation } from '../../styles';
+import { StyledNavigation } from 'shared/styles';
 
 interface IProps {
   prevYear: () => void;

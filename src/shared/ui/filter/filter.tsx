@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyledFilter } from 'shared/styles';
-import { useAppDispatch } from 'shared/index';
+import { useAppDispatch } from 'shared/hooks';
 import { changeFilterText } from 'app';
 
 export const Filter = () => {
