@@ -76,8 +76,8 @@ export const CalendarButtons = () => {
                     {
                       tasks: {
                         '2023-01-04': [
-                          { id: 1, task: 'task1', label: ['red', 'green'] },
-                          { id: 2, task: 'task2', label: ['red'] },
+                          { id: '1abc-f2', task: 'task1', label: ['red', 'green'] },
+                          { id: '2bca-j1s', task: 'task2', label: ['red'] },
                         ],
                       },
                     },
